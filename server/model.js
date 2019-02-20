@@ -14,10 +14,10 @@ const models = {
     avatar: { type: String },
     desc: { type: String },
     //position title
-    title: { type: String },
+    position: { type: String },
     //if you are boss
     company: { type: String },
-    compensation: { type: String },
+    salary: { type: String },
   },
   chat: {},
 };

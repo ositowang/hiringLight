@@ -5,6 +5,25 @@ const utils = require('utility');
 const userModel = models.getModel('user');
 const _filter = { pwd: 0, __v: 0 };
 
+Router.post('/update', function(req, res) {
+  const { userid } = req.signedCookies;
+  if (!userid) {
+    return res.json({ code: 1, msg: 'not authorized' });
+  }
+  const body = req.body;
+  userModel.findByIdAndUpdate(userid, body, function(err, doc) {
+    const rawData = Object.assign(
+      {},
+      {
+        user: doc.user,
+        type: doc.type,
+      },
+      body,
+    );
+    const { pwd, ...data } = rawData;
+    return res.json({ code: 0, data });
+  });
+});
 Router.post('/login', function(req, res) {
   const { user, pwd } = req.body;
   userModel.findOne({ user, pwd: md5Pwd(pwd) }, _filter, function(err, doc) {
@@ -24,8 +43,9 @@ Router.post('/login', function(req, res) {
 
 Router.get('/list', function(req, res) {
   // userModel.remove({}, function(e, d) {});
-  userModel.find({}, function(err, doc) {
-    return res.json(doc);
+  const { type } = req.query;
+  userModel.find({ type }, function(err, doc) {
+    return res.json({ code: 0, data: doc });
   });
 });
 
@@ -53,7 +73,6 @@ Router.post('/register', function(req, res) {
 
 Router.get('/info', function(req, res) {
   const { userid } = req.signedCookies;
-  console.log(userid);
   if (!userid) {
     return res.json({ code: 1, msg: 'something wrong with the cookies' });
   }
