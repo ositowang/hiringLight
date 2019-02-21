@@ -3,7 +3,9 @@ const Router = express.Router();
 const models = require('./model');
 const utils = require('utility');
 const userModel = models.getModel('user');
+const Chat = models.getModel('chat');
 const _filter = { pwd: 0, __v: 0 };
+// Chat.remove({}, function(e, d) {});
 
 Router.post('/update', function(req, res) {
   const { userid } = req.signedCookies;
@@ -83,6 +85,28 @@ Router.get('/info', function(req, res) {
     if (doc) {
       return res.json({ code: 0, data: doc });
     }
+  });
+});
+
+Router.get('/getMsgList', function(req, res) {
+  const { userid } = req.signedCookies;
+  console.log(userid);
+  // $or: [{ "from": user, "to": user }]
+  userModel.find({}, function(err, userDoc) {
+    let users = {};
+    userDoc.forEach((v) => {
+      users[v._id] = { name: v.user, avatar: v.avatar };
+    });
+    Chat.find(
+      {
+        $or: [{ from: userid }, { to: userid }],
+      },
+      function(err, doc) {
+        if (!err) {
+          return res.json({ code: 0, msg: doc, users: users });
+        }
+      },
+    );
   });
 });
 

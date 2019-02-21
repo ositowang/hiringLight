@@ -6,10 +6,15 @@ import NavLink from '../NavLink';
 import Boss from '../Boss';
 import Genius from '../Genius';
 import User from '../User';
+import { getMsgList, receiveMsg } from '../../redux/chatReducer';
 function Msg() {
   return <div>Msg</div>;
 }
 class Dashboard extends Component {
+  componentDidMount() {
+    this.props.getMsgList();
+    this.props.receiveMsg();
+  }
   render() {
     const { pathname } = this.props.location;
     const user = this.props.user;
@@ -63,7 +68,6 @@ class Dashboard extends Component {
           })}
         </Switch>
         <NavLink data={navList} />
-        
       </div>
     );
   }
@@ -71,5 +75,5 @@ class Dashboard extends Component {
 
 export default connect(
   (state) => state,
-  null,
+  { getMsgList, receiveMsg },
 )(Dashboard);

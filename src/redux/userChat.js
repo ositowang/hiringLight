@@ -15,8 +15,6 @@ function userChatReducer(state = initialState, action) {
   }
 }
 
-
-
 //action creators
 
 function userList(data) {
@@ -27,7 +25,6 @@ function getUserList(type) {
   return (dispatch) => {
     axios.get('/user/list?type=' + type).then((res) => {
       if (res.data.code === 0 && res.status === 200) {
-        console.log(res.data.data);
         dispatch(userList(res.data.data));
       }
     });

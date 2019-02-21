@@ -7,6 +7,8 @@ import BossInfo from './container/bossinfo';
 import GeniusInfo from './container/geniusinfo';
 import Dashboard from './components/Dashboard';
 import Home from './container/Home';
+import Chat from './components/Chat';
+
 class App extends Component {
   render() {
     return (
@@ -18,6 +20,7 @@ class App extends Component {
           <Route path="/bossinfo" component={BossInfo} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/chat/:user" component={Chat} />
           <Route component={Dashboard} />
         </Switch>
       </div>
