@@ -6,14 +6,17 @@ import NavLink from '../NavLink';
 import Boss from '../Boss';
 import Genius from '../Genius';
 import User from '../User';
+import Message from '../Message'
 import { getMsgList, receiveMsg } from '../../redux/chatReducer';
 function Msg() {
   return <div>Msg</div>;
 }
 class Dashboard extends Component {
   componentDidMount() {
-    this.props.getMsgList();
-    this.props.receiveMsg();
+    if (this.props.chat.chatMsg.length === 0) {
+      this.props.getMsgList();
+      this.props.receiveMsg();
+    }
   }
   render() {
     const { pathname } = this.props.location;
@@ -40,7 +43,7 @@ class Dashboard extends Component {
         text: 'Msg',
         icon: 'msg',
         title: 'Message',
-        component: Msg,
+        component: Message,
       },
       {
         path: '/me',

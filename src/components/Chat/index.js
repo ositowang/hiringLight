@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { InputItem, List, NavBar } from 'antd-mobile';
+import { InputItem, List, NavBar, Grid } from 'antd-mobile';
 import { connect } from 'react-redux';
 import { getMsgList, sendMsg, receiveMsg } from '../../redux/chatReducer';
 import './style.css';
-import io from 'socket.io-client';
-const socket = io('ws://localhost:9093');
+import { getChatId } from '../../utils/utils';
 
 class Chat extends Component {
   constructor(props) {
@@ -19,21 +18,35 @@ class Chat extends Component {
       this.props.getMsgList();
       this.props.receiveMsg();
     }
+    setTimeout(function() {
+      window.dispatchEvent(new Event('resize'));
+    }, 0);
   }
 
   handleSend() {
-    // socket.emit('sendMsg', { text: this.state.text });
     const from = this.props.user._id;
     const to = this.props.match.params.user;
     const msg = this.state.text;
     this.props.sendMsg({ from, to, msg });
     this.setState({
       text: '',
+      showEmoji: false,
     });
   }
+  fixCarousel() {
+    setTimeout(function() {
+      window.dispatchEvent(new Event('resize'));
+    }, 0);
+  }
   render() {
+    const emoji = '😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 😗 😘 😜 🤪 😞 😟 😭 😡 👐 🕵 🕵️‍ 👩‍⚕️ 😈 👿 👹 👺 🤡 💩 👻 💀 ☠ 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 😿 🤲 🙌 👏 🤝 👎 ✊ 🤛 🤜 🤞 ✌ 🤟 🤘 👌 👉 👉 👆 👇 ✋ 👧 🧒 👦 👩 👨'
+      .split(' ')
+      .filter((v) => v)
+      .map((v) => ({ text: v }));
     const userId = this.props.match.params.user;
     const users = this.props.chat.users;
+    const chatId = getChatId(this.props.user._id, userId);
+    const chatMsg = this.props.chat.chatMsg.filter((v) => v.chatId === chatId);
     //if we did not get user for any reason,don't show
     if (!users[userId]) {
       return null;
@@ -49,7 +62,7 @@ class Chat extends Component {
         >
           {users[userId].name}
         </NavBar>
-        {this.props.chat.chatMsg.map((v) => {
+        {chatMsg.map((v) => {
           const avatar = require(`../../assets/avatarImg/${
             users[v.from].avatar
           }.png`);
@@ -78,9 +91,39 @@ class Chat extends Component {
                   text: v,
                 });
               }}
-              extra={<span onClick={() => this.handleSend()}>Send</span>}
+              extra={
+                <div>
+                  <span
+                    role="img"
+                    aria-label="emoji"
+                    style={{ marginRight: 6 }}
+                    onClick={() => {
+                      this.setState({
+                        showEmoji: true,
+                      });
+                      this.fixCarousel();
+                    }}
+                  >
+                    😃
+                  </span>
+                  <span onClick={() => this.handleSend()}>Send</span>
+                </div>
+              }
             />
           </List>
+          {this.state.showEmoji ? (
+            <Grid
+              data={emoji}
+              columnNum={9}
+              isCarousel={true}
+              carouselMaxRow={3}
+              onClick={(el) => {
+                this.setState({
+                  text: this.state.text + el.text,
+                });
+              }}
+            />
+          ) : null}
         </div>
       </div>
     );

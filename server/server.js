@@ -7,6 +7,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const models = require('./model');
 const Chat = models.getModel('chat');
+// Chat.remove({}, function(e, d) {});
 
 io.on('connection', function(socket) {
   socket.on('sendMsg', function(data) {
