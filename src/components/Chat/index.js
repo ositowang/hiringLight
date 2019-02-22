@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { InputItem, List, NavBar, Grid } from 'antd-mobile';
 import { connect } from 'react-redux';
-import { getMsgList, sendMsg, receiveMsg } from '../../redux/chatReducer';
+import {
+  getMsgList,
+  sendMsg,
+  receiveMsg,
+  readMsg,
+} from '../../redux/chatReducer';
 import './style.css';
 import { getChatId } from '../../utils/utils';
 
@@ -14,13 +19,20 @@ class Chat extends Component {
     };
   }
   componentDidMount() {
-    if (this.props.chat.chatMsg.length === 0) {
+    if (!this.props.chat.chatMsg.length) {
+      console.log(this.props.chat.chatMsg);
       this.props.getMsgList();
       this.props.receiveMsg();
     }
     setTimeout(function() {
       window.dispatchEvent(new Event('resize'));
     }, 0);
+  }
+
+  componentWillUnmount() {
+    //the one who send us the message
+    const to = this.props.match.params.user;
+    this.props.readMsg(to);
   }
 
   handleSend() {
@@ -132,5 +144,5 @@ class Chat extends Component {
 
 export default connect(
   (state) => state,
-  { getMsgList, sendMsg, receiveMsg },
+  { getMsgList, sendMsg, receiveMsg, readMsg },
 )(Chat);

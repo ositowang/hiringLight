@@ -6,11 +6,9 @@ import NavLink from '../NavLink';
 import Boss from '../Boss';
 import Genius from '../Genius';
 import User from '../User';
-import Message from '../Message'
+import Message from '../Message';
 import { getMsgList, receiveMsg } from '../../redux/chatReducer';
-function Msg() {
-  return <div>Msg</div>;
-}
+
 class Dashboard extends Component {
   componentDidMount() {
     if (this.props.chat.chatMsg.length === 0) {

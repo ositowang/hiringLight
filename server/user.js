@@ -90,7 +90,6 @@ Router.get('/info', function(req, res) {
 
 Router.get('/getMsgList', function(req, res) {
   const { userid } = req.signedCookies;
-  console.log(userid);
   // $or: [{ "from": user, "to": user }]
   userModel.find({}, function(err, userDoc) {
     let users = {};
@@ -108,6 +107,23 @@ Router.get('/getMsgList', function(req, res) {
       },
     );
   });
+});
+
+Router.post('/readMsg', function(req, res) {
+  const { userid } = req.signedCookies;
+  const { from } = req.body;
+  Chat.update(
+    { from, to: userid },
+    { $set: { read: true } },
+    { multi: true },
+    function(err, doc) {
+      console.log(doc);
+      if (!err) {
+        return res.json({ code: 0, num: doc.nModified });
+      }
+      return res.json({ code: 1, msg: 'unread update failed' });
+    },
+  );
 });
 
 function md5Pwd(pwd) {
