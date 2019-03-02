@@ -4,7 +4,7 @@ A light-weight hiring mobile app with live chat
 
 ## Demo
 
-<div align="middle">
+<div align="left">
 <img src="./demo/Login.PNG" width="132" margin-left="20" title="Login Page">
 <img src="./demo/ChatPage.PNG" width="133" margin-left="20" title="ChatPage">
 <img src="./demo/MessageList.PNG" width="133" margin-left="20" title="MessageList">
