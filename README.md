@@ -4,6 +4,11 @@ A light-weight hiring mobile app with live chat
 
 ## Demo
 
+<img src="./demo/Login.PNG" width="132" title="Login Page">
+<img src="./demo/ChatPage.PNG" width="133" title="ChatPage">
+<img src="./demo/MessageList.PNG" width="133" title="MessageList">
+<img src="./demo/InfoPage.PNG" width="133" title="InfoPage">
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
